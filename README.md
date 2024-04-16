@@ -1,1 +1,3 @@
 # try_pine_script
+
+BB and Kelenter with yearly vertical lines: https://github.com/alirahmani93/try_pine_script/blob/main/BB_KC_vYear.pine
