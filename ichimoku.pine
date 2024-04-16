@@ -1,0 +1,35 @@
+// This Pine Script™ code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © ali93rahmani
+
+//@version=5
+indicator(title="Ichimoku Cloud", shorttitle="IC", overlay=true)
+
+// Ichimoku Cloud parameters
+tenkanPeriod = 9
+kijunPeriod = 26
+senkouSpanBPeriod = 52
+
+// Calculate Tenkan-sen (Conversion Line)
+tenkanSen = (ta.highest(high, tenkanPeriod) +ta.lowest(low, tenkanPeriod)) / 2
+
+// Calculate Kijun-sen (Base Line)
+kijunSen = (ta.highest(high, kijunPeriod) + ta.lowest(low, kijunPeriod)) / 2
+
+// Calculate Senkou Span A (Leading Span A)
+senkouSpanA = (tenkanSen + kijunSen) / 2
+
+// Calculate Senkou Span B (Leading Span B)
+senkouSpanB = (ta.highest(high, senkouSpanBPeriod) + ta.lowest(low, senkouSpanBPeriod)) / 2
+
+// Calculate Chikou Span (Lagging Span)
+chikouSpan = close[26]
+
+// Plotting
+plot(tenkanSen, color=color.blue, linewidth=2, title="Tenkan-sen")
+plot(kijunSen, color=color.red, linewidth=2, title="Kijun-sen")
+senkouSpanBPlot = plot(senkouSpanB, offset=26, color=color.orange, linewidth=2, title="Senkou Span B")
+senkouSpanAPlot = plot(senkouSpanA, offset=26, color=color.green, linewidth=2, title="Senkou Span A")
+plot(chikouSpan, offset=-26, color=color.purple, linewidth=2, title="Chikou Span")
+
+// Fill the area between Senkou Span A and B
+fill(senkouSpanAPlot, senkouSpanBPlot, color=color.new(color.green, 90))
