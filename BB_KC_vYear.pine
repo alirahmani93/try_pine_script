@@ -1,0 +1,43 @@
+//@version=5
+indicator(title="BB & KC with Yearly Vertical Lines", overlay=true)
+
+// Bollinger Bands parameters
+lengthBB = 20
+srcBB = close
+multBB = 2.0
+
+// Keltner Channel parameters
+lengthKC = 20
+srcKC = close
+multKC = 2.0
+atrLengthKC = 14
+
+// Calculate Bollinger Bands
+[upperBB, middleBB, lowerBB] = ta.bb(srcBB, lengthBB, multBB)
+
+// Calculate Keltner Channel
+[upperKC, middleKC, lowerKC] = ta.kc(srcKC, lengthKC, multKC, atrLengthKC)
+
+// Plot Bollinger Bands and capture their plot IDs
+upperBBPlot = plot(upperBB, color=color.red)
+middleBBPlot = plot(middleBB, color=color.blue)
+lowerBBPlot = plot(lowerBB, color=color.red)
+
+// Fill the area between the upper and lower Bollinger Bands
+fill(upperBBPlot, lowerBBPlot, color=color.new(color.rgb(177, 177, 177), 90))
+
+// Plot Keltner Channel
+upperKCPlot = plot(upperKC, color=color.green)
+middleKCPlot = plot(middleKC, color=color.blue)
+lowerKCPlot = plot(lowerKC, color=color.green)
+
+// Fill the area between the upper and lower Keltner Channels
+fill(upperKCPlot, lowerKCPlot, color=color.new(color.rgb(84, 86, 208, 90),90))
+
+// Function to draw a vertical line
+drawLine(bar_index) =>
+    line.new(bar_index, low[1], bar_index, high[1], xloc.bar_index, extend.both, color=color.red, style=line.style_solid, width=1)
+
+// Check if the year has changed
+if (year(time) != year(time[1]))
+    drawLine(bar_index)
